@@ -1,0 +1,20 @@
+Фото товаров магазина. Имена файлов:
+polar.png
+kitsune.png
+samurai.png
+blackmarket.png
+tiki.png
+shark.png
+farmer.png
+gatherer.png
+fisher.png
+battlepass.png
+case-weapons.png
+case-sets.png
+case-recipes.png
+case-furniture.png
+case-kitchen.png
+case-market.png
+case-tavern.png
+case-agro1.png
+case-agro2.png

@@ -19,7 +19,7 @@ SITE = {
 
 LINKS = [
     # (ключ иконки, подпись, ссылка, короткое пояснение)
-    ("shop", "Магазин", "https://middleland.millida.trade/", "Привилегии, сеты и кейсы"),
+    ("shop", "Магазин", "shop.html", "Привилегии, сеты и кейсы. ₽, Br и ₴"),
     ("telegram", "Telegram", "https://t.me/middl4lands", "Новости и анонсы"),
     ("discord", "Discord", "https://discord.gg/J4PXDYsnq5", "Общение, помощь, ивенты"),
     ("youtube", "YouTube", "https://www.youtube.com/@Middl4Lands/shorts", "Трейлеры и шортсы"),

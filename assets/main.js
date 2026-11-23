@@ -161,3 +161,59 @@
   }
   input.addEventListener('input', run);
 })();
+
+/* Магазин: ник, выбор срока и ссылки на Donatello (сумма, ник и товар подставляются сами). */
+(function () {
+  var nick = document.getElementById('shop-nick-input');
+  if (!nick) return;
+  var KEY = 'ml-shop-nick';
+  try { nick.value = localStorage.getItem(KEY) || ''; } catch (e) {}
+  var DN = 'https://donatello.to/middlelands';
+  var RUB_PER_BYN = 27.7;
+
+  function clean(s) { return (s || '').replace(/[^A-Za-z0-9_]/g, '').slice(0, 16); }
+  function link(a) {
+    var n = clean(nick.value);
+    var q = [];
+    if (a.dataset.uah) q.push('a=' + encodeURIComponent(a.dataset.uah));
+    if (n) q.push('c=' + encodeURIComponent(n));
+    var what = a.dataset.name + (a.dataset.variant ? ' (' + a.dataset.variant + ')' : '');
+    q.push('m=' + encodeURIComponent('[' + a.dataset.code + '] ' + what + (n ? ' — ник ' + n : '')));
+    a.href = DN + '?' + q.join('&');
+  }
+  function all() { document.querySelectorAll('[data-dn]').forEach(link); }
+
+  nick.addEventListener('input', function () {
+    var v = clean(nick.value);
+    if (v !== nick.value) nick.value = v;
+    nick.classList.remove('is-missing');
+    try { localStorage.setItem(KEY, v); } catch (e) {}
+    all();
+  });
+
+  document.addEventListener('click', function (e) {
+    var a = e.target.closest('[data-dn]');
+    if (a && !clean(nick.value)) {
+      e.preventDefault();
+      nick.classList.add('is-missing');
+      nick.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(function () { nick.focus(); }, 350);
+      var t = document.querySelector('.toast');
+      if (t) { t.textContent = 'Сначала впиши ник — без него покупку не выдать'; t.classList.add('is-on'); setTimeout(function () { t.classList.remove('is-on'); }, 2600); }
+      return;
+    }
+    var b = e.target.closest('.sp-var');
+    if (!b) return;
+    var card = b.closest('[data-product]');
+    card.querySelectorAll('.sp-var').forEach(function (x) { x.setAttribute('aria-pressed', x === b ? 'true' : 'false'); });
+    var rub = +b.dataset.rub;
+    card.querySelector('.sp-price [data-rub]').textContent = rub;
+    card.querySelector('.sp-price [data-uah]').textContent = b.dataset.uah;
+    var byn = rub / RUB_PER_BYN;
+    card.querySelector('.sp-price [data-byn]').textContent = (byn < 100 ? byn.toFixed(1) : byn.toFixed(0)).replace('.', ',');
+    var dn = card.querySelector('[data-dn]');
+    dn.dataset.uah = b.dataset.uah; dn.dataset.code = b.dataset.code; dn.dataset.variant = b.dataset.label;
+    link(dn);
+  });
+  all();
+})();

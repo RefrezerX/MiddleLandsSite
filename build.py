@@ -95,8 +95,10 @@ def icon(name, cls="ico"):
 
 
 def socials(prefix="", cls="socials"):
+    def href(url):
+        return (esc(url) + '" target="_blank" rel="noopener') if url.startswith("http") else prefix + esc(url)
     items = "".join(
-        f'<li><a class="sigil" href="{esc(url)}" target="_blank" rel="noopener">{icon(key)}'
+        f'<li><a class="sigil" href="{href(url)}">{icon(key)}'
         f'<span class="sigil-text"><span class="sigil-name">{esc(label)}</span>'
         f'<span class="sigil-note">{esc(note)}</span></span></a></li>'
         for key, label, url, note in C.LINKS)
@@ -136,7 +138,7 @@ def head(title, desc, prefix):
 
 def nav(prefix, active=""):
     links = [("index.html", "Сервер", "home"), ("guides/index.html", "Гайды", "guides"),
-             (C.LINKS[0][2], "Магазин", "shop")]
+             ("shop.html", "Магазин", "shop")]
     items = "".join(
         f'<a href="{(href if href.startswith("http") else prefix + href)}"'
         f'{" aria-current=page" if key == active else ""}'
@@ -209,7 +211,7 @@ def page_index():
       <p class="hero-sub">Тёмное средневековое RPG-выживание: живой мир, ремёсла, классы и королевства. {esc(S["season"])} уже идёт.</p>
       {ip_plate(S["ip"], "Minecraft Java " + S["version"] + ". Из России — " + S["ip_ru"])}
       <div class="hero-links">
-        <a class="btn btn-gold" href="{esc(C.LINKS[0][2])}" target="_blank" rel="noopener">{icon("shop")}Открыть магазин</a>
+        <a class="btn btn-gold" href="shop.html">{icon("shop")}Открыть магазин</a>
         <a class="btn btn-ghost" href="{esc(C.LINKS[2][2])}" target="_blank" rel="noopener">{icon("discord")}Войти в Discord</a>
       </div>
     </div>
@@ -253,7 +255,7 @@ def page_index():
       <p>Девять привилегий с собственными сетами брони, умениями и командами. Каждую неделю — кейс со своим сетом. При апгрейде доплачиваешь только разницу.</p>
     </div>
     <ul class="cls-row">{classes}</ul>
-    <a class="btn btn-gold btn-center" href="{esc(C.LINKS[0][2])}" target="_blank" rel="noopener">{icon("shop")}Выбрать привилегию</a>
+    <a class="btn btn-gold btn-center" href="shop.html">{icon("shop")}Выбрать привилегию</a>
   </section>
 
   <section class="join wrap reveal" id="join">
@@ -348,6 +350,165 @@ def page_guides_index():
 """ + footer(p)
 
 
+
+# ------------------------------------------------------------------ магазин
+import shop_data as SD
+
+
+def _byn(rub):
+    v = rub / SD.RUB_PER_BYN
+    return (f"{v:.1f}" if v < 100 else f"{v:.0f}").replace(".", ",")
+
+
+def _price(rub, uah, old_rub=None, old_uah=None):
+    old = f'<s class="sp-old">{old_rub} ₽</s>' if old_rub else ""
+    oldu = f'<s class="sp-old">{old_uah} ₴</s>' if old_uah else ""
+    return (f'<div class="sp-price">'
+            f'<span class="sp-rub">{old}<b data-rub>{rub}</b> ₽ <small>≈ <span data-byn>{_byn(rub)}</span> Br</small></span>'
+            f'<span class="sp-uah">{oldu}<b data-uah>{uah}</b> ₴</span></div>')
+
+
+def _buttons(pid, name, code, uah, variant=""):
+    mil = f'{SD.MILLIDA}/product/{pid}?server={SD.MILLIDA_SERVER}'
+    return (f'<div class="sp-buy">'
+            f'<a class="btn btn-gold sp-btn" href="{esc(mil)}" target="_blank" rel="noopener">'
+            f'<span class="sp-btn-cur">₽ / Br</span><span class="sp-btn-sub">Оплатить через Millida</span></a>'
+            f'<a class="btn btn-ghost sp-btn sp-btn-uah" href="{esc(SD.DONATELLO)}" target="_blank" rel="noopener" '
+            f'data-dn data-name="{esc(name)}" data-code="{esc(code)}" data-uah="{uah}" data-variant="{esc(variant)}">'
+            f'<span class="sp-btn-cur">₴ Гривны</span><span class="sp-btn-sub">Оплатить через Donatello</span></a></div>')
+
+
+def _md(text):
+    """Описание в стиле Millida: **заголовки** и строки «• »."""
+    out, ul = [], []
+    def flush():
+        if ul: out.append("<ul>" + "".join(f"<li>{inline(x)}</li>" for x in ul) + "</ul>"); ul.clear()
+    for ln in text.split("\n"):
+        ln = ln.strip()
+        if not ln: flush(); continue
+        if ln.startswith("• "): ul.append(ln[2:]); continue
+        flush()
+        m = re.fullmatch(r"\*\*(.+)\*\*", ln)
+        out.append(f"<h4>{esc(m.group(1))}</h4>" if m else f"<p>{inline(ln)}</p>")
+    flush()
+    return "".join(out)
+
+
+def _priv(p, prefix):
+    v30, vf = p["variants"]
+    toggle = "".join(
+        f'<button type="button" class="sp-var" aria-pressed="{"true" if i == 0 else "false"}" '
+        f'data-rub="{rub}" data-uah="{uah}" data-code="{code}" data-label="{esc(lbl)}">{esc(lbl)}<small>{rub} ₽ · {uah} ₴</small></button>'
+        for i, (lbl, rub, uah, code) in enumerate(p["variants"]))
+    details = (f"**Что входит**\n• Кейс со своим сетом — открывается раз в 7 дней: {p['set']}\n{SD.INCLUDES}\n\n"
+               f"**Бонус полного сета**\n" + "\n".join("• " + x for x in p["bonus"]) + "\n\n"
+               + ("**Оружие сета**\n" + "\n".join("• " + x for x in p["weapon"]) + "\n\n" if p["weapon"] else "")
+               + p["perks"] + "\n\n" + SD.UPGRADE)
+    badge = f'<span class="sp-badge">{esc(p["badge"])}</span>' if p.get("badge") else ""
+    return f"""<article class="sp-card sp-priv" id="{p['slug']}" style="--acc:{p['accent']}" data-product>
+  {photo(f"img/shop/{p['slug']}.png", f"Превью «{p['name']}». Квадрат, от 800×800, прозрачный или тёмный фон", "sp-photo", prefix, p["name"])}
+  <div class="sp-body">
+    <p class="sp-meta"><span class="sp-tier">Класс {esc(p['tier'])}</span>{badge}</p>
+    <h3 class="sp-name">{esc(p['name'])}</h3>
+    <p class="sp-short">{esc(p['short'])}</p>
+    <p class="sp-lead">{esc(p['lead'])}</p>
+    <div class="sp-vars" role="group" aria-label="Срок">{toggle}</div>
+    {_price(v30[1], v30[2])}
+    {_buttons(p['id'], p['name'], v30[3], v30[2], v30[0])}
+    <details class="sp-more"><summary>Что даёт привилегия</summary><div class="sp-desc">{_md(details)}</div></details>
+  </div>
+</article>"""
+
+
+def _small(it, prefix, kind="sp-case"):
+    return f"""<article class="sp-card {kind}" id="{it['slug']}" style="--acc:{it.get('accent', '#d9a85b')}" data-product>
+  {photo(f"img/shop/{it['slug']}.png", f"Иконка «{it['name']}». Квадрат, от 512×512", "sp-photo", prefix, it["name"])}
+  <div class="sp-body">
+    {f'<p class="sp-meta"><span class="sp-badge">{esc(it["badge"])}</span></p>' if it.get("badge") else ""}
+    <h3 class="sp-name">{esc(it['name'])}</h3>
+    <p class="sp-short">{esc(it.get('short') or it['desc'])}</p>
+    {f'<p class="sp-lead">{esc(it["desc"])}</p>' if it.get("short") else ""}
+    {_price(it['rub'], it['uah'], it.get('old_rub'), it.get('old_uah'))}
+    {_buttons(it['id'], it['name'], it['code'], it['uah'])}
+  </div>
+</article>"""
+
+
+def page_shop():
+    p = ""
+    privs = "".join(_priv(x, p) for x in SD.PRIVILEGES)
+    extras = "".join(_small(x, p, "sp-extra") for x in SD.EXTRAS)
+    cases = "".join(_small(x, p) for x in SD.CASES)
+    s = SD.SUPPORT
+    support = f"""<article class="sp-card sp-extra sp-support" id="support" style="--acc:#FF4D7A">
+  <div class="sp-body">
+    <h3 class="sp-name">{esc(s['name'])}</h3>
+    <p class="sp-short">{esc(s['desc'])}</p>
+    <div class="sp-buy">
+      <a class="btn btn-gold sp-btn" href="{esc(SD.MILLIDA)}/product/{s['id']}?server={SD.MILLIDA_SERVER}" target="_blank" rel="noopener"><span class="sp-btn-cur">₽ / Br</span><span class="sp-btn-sub">Любая сумма от 10 ₽</span></a>
+      <a class="btn btn-ghost sp-btn sp-btn-uah" href="{esc(SD.DONATELLO)}" target="_blank" rel="noopener" data-dn data-free data-name="Поддержка сервера" data-code="SUPPORT" data-uah=""><span class="sp-btn-cur">₴ Гривны</span><span class="sp-btn-sub">Любая сумма от 10 ₴</span></a>
+    </div>
+  </div>
+</article>"""
+    toc = [("privileges", "Привилегии"), ("pass", "Боевой пропуск"), ("cases", "Кейсы"), ("how", "Как оплатить в гривнах"), ("faq", "Вопросы")]
+    return head("Официальный магазин — MiddleLands", "Привилегии, боевой пропуск и кейсы сервера MiddleLands. Оплата в рублях, белорусских рублях и гривнах.", p) + f"""
+<body class="page-shop">
+{nav(p, "shop")}
+<main id="main" class="shop wrap">
+  <header class="shop-head">
+    <h1 class="shop-title">Официальный магазин</h1>
+    <p class="shop-lead">Привилегии с собственными сетами, боевой пропуск и кейсы. Каждая покупка продлевает серверу жизнь — спасибо, что поддерживаешь MiddleLands.</p>
+    <div class="shop-pay">
+      <div class="shop-nick">
+        <label for="shop-nick-input">Твой ник в Minecraft</label>
+        <input id="shop-nick-input" type="text" inputmode="latin" autocomplete="nickname" maxlength="16" placeholder="Например, Steve" spellcheck="false">
+        <p class="shop-nick-note">Нужен для оплаты в гривнах: подставим его в форму Donatello. Для Millida ник вводится на её странице.</p>
+      </div>
+      <ul class="shop-ways">
+        <li><b>₽ / Br</b> — оплата через Millida. Цена в белорусских рублях примерная: банк спишет по своему курсу.</li>
+        <li><b>₴</b> — оплата через Donatello для игроков из Украины.</li>
+      </ul>
+    </div>
+    <nav class="shop-toc" aria-label="Разделы магазина">{"".join(f'<a href="#{a}">{t}</a>' for a, t in toc)}</nav>
+  </header>
+
+  <section class="shop-sec" id="privileges">
+    <h2>Привилегии</h2>
+    <p class="shop-sec-lead">Классы выстроены лестницей: от C до S+. Каждая следующая включает всё, что дают привилегии ниже, а при апгрейде доплачиваешь только разницу.</p>
+    <div class="sp-list">{privs}</div>
+  </section>
+
+  <section class="shop-sec" id="pass">
+    <h2>Боевой пропуск и поддержка</h2>
+    <div class="sp-grid sp-grid-2">{extras}{support}</div>
+  </section>
+
+  <section class="shop-sec" id="cases">
+    <h2>Кейсы</h2>
+    <div class="sp-grid">{cases}</div>
+  </section>
+
+  <section class="shop-sec shop-how" id="how">
+    <h2>Как оплатить в гривнах</h2>
+    <ol class="shop-steps">
+      <li><b>Впиши ник</b> в поле вверху страницы. Он сохранится в этом браузере.</li>
+      <li><b>Нажми «₴ Гривны»</b> у нужного товара. Откроется Donatello с уже подставленными суммой, ником и названием товара.</li>
+      <li><b>Не меняй сумму и сообщение.</b> По ним мы понимаем, что ты купил. Если сумма будет меньше цены, товар не выдадут.</li>
+      <li><b>Оплати картой.</b> Товар придёт на сервер после проверки платежа.</li>
+    </ol>
+  </section>
+
+  <section class="shop-sec" id="faq">
+    <h2>Вопросы</h2>
+    <details class="shop-q"><summary>Когда придёт покупка?</summary><p>Через Millida — сразу после оплаты. Через Donatello — после проверки платежа, обычно в течение нескольких часов, максимум за сутки.</p></details>
+    <details class="shop-q"><summary>Ошибся в нике или покупка не пришла</summary><p>Напиши в Discord в канал поддержки: ник, товар, время и способ оплаты. Разберёмся и выдадим вручную.</p></details>
+    <details class="shop-q"><summary>Как работает апгрейд привилегии?</summary><p>Если у тебя уже есть привилегия ниже, при покупке старшей доплачиваешь только разницу. На Millida это считается автоматически, при оплате в гривнах — напиши в поддержку, посчитаем вручную.</p></details>
+    <details class="shop-q"><summary>Что значит «30 дней» и «Навсегда»?</summary><p>«30 дней» — привилегия на месяц, потом её можно продлить. «Навсегда» — без срока, пока существует сервер.</p></details>
+  </section>
+</main>
+""" + footer(p)
+
+
 # ------------------------------------------------------------------ сборка
 def build():
     (OUT / "guides").mkdir(parents=True, exist_ok=True)
@@ -358,8 +519,9 @@ def build():
     (OUT / "guides" / "index.html").write_text(page_guides_index(), encoding="utf-8")
     for i, g in enumerate(C.GUIDES):
         (OUT / "guides" / f'{g["slug"]}.html').write_text(page_guide(g, i), encoding="utf-8")
+    (OUT / "shop.html").write_text(page_shop(), encoding="utf-8")
     (OUT / ".nojekyll").write_text("", encoding="utf-8")
-    print(f"Готово: {OUT} — {len(C.GUIDES) + 2} страниц")
+    print(f"Готово: {OUT} — {len(C.GUIDES) + 3} страниц")
 
 
 if __name__ == "__main__":
