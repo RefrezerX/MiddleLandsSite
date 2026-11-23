@@ -280,6 +280,15 @@ def sidebar(prefix, current=""):
     return f'<aside class="side"><nav aria-label="Гайды">{"".join(blocks)}</nav></aside>'
 
 
+def search_box(g):
+    """Поиск по таблицам гайда (бестиарий, карта руд). Работает без перезагрузки."""
+    if not g.get("search"):
+        return ""
+    return (f'<div class="g-search" role="search"><label for="g-search-input">Поиск по странице</label>'
+            f'<input id="g-search-input" type="search" autocomplete="off" placeholder="{esc(g["search"])}">'
+            f'<p class="g-search-count" aria-live="polite"></p></div>')
+
+
 def page_guide(g, i):
     p = "../"
     secs = "".join(f'<section class="g-sec" id="s{n}"><h2>{esc(t)}</h2>{rich(body)}</section>'
@@ -305,6 +314,7 @@ def page_guide(g, i):
     <p class="g-lead">{esc(g["lead"])}</p>
     {photo(g["img"], g["hint"], "g-cover", p)}
     {"<nav class='g-toc' aria-label='На этой странице'><ul>" + toc + "</ul></nav>" if len(g["sections"]) > 2 else ""}
+    {search_box(g)}
     {secs}
     {tips}
     {cmds}

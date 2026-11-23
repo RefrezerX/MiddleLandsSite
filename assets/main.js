@@ -130,3 +130,34 @@
     document.querySelectorAll('.g-sec').forEach((s) => so.observe(s));
   }
 })();
+
+/* Поиск по таблицам гайда: скрывает строки и разделы без совпадений. */
+(function () {
+  var input = document.getElementById('g-search-input');
+  if (!input) return;
+  var count = document.querySelector('.g-search-count');
+  var secs = Array.prototype.slice.call(document.querySelectorAll('.g-sec'));
+  function norm(s) { return (s || '').toLowerCase().replace(/ё/g, 'е'); }
+  function run() {
+    var q = norm(input.value.trim());
+    var found = 0;
+    secs.forEach(function (sec) {
+      var rows = sec.querySelectorAll('tbody tr');
+      if (!q) {
+        sec.hidden = false;
+        rows.forEach(function (r) { r.hidden = false; });
+        return;
+      }
+      var head = norm(sec.querySelector('h2') ? sec.querySelector('h2').textContent : '');
+      var any = false;
+      rows.forEach(function (r) {
+        var hit = head.indexOf(q) >= 0 || norm(r.textContent).indexOf(q) >= 0;
+        r.hidden = !hit;
+        if (hit) { any = true; found++; }
+      });
+      sec.hidden = !any && head.indexOf(q) < 0;
+    });
+    count.textContent = q ? (found ? 'Найдено строк: ' + found : 'Ничего не нашлось. Попробуй другое слово.') : '';
+  }
+  input.addEventListener('input', run);
+})();

@@ -1,0 +1,1063 @@
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+#  MythicBarrel's Waterlogged Vol.1-3 — спавн по водным биомам (ваниль + Terralith)
+#  Переработано 23.11.2026.
+#
+#  Два слоя:
+#   R_*  (REPLACE) — подменяют часть ванильных рыб/кальмаров/дельфинов,
+#                    поэтому общее число мобов в воде от них не растёт.
+#   A_*  (ADD, PositionType: SEA) — собственные точки спавна MythicMobs в воде
+#                    вокруг игроков. Работают и там, где ваниль почти ничего
+#                    не спавнит (Terralith: skylands, alpha/mirage isles,
+#                    gravel_beach, болота, оазисы, пруды в джунглях).
+#  Плотность: у каждой группы свой лимит mobsinradius + общий лимит
+#  не больше 24 мобов этих паков в радиусе 48 блоков.
+#  Cooldown — секунды между спавнами одного правила.
+# ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+# ===================== СЛОЙ 1: ЗАМЕНА ВАНИЛЬНЫХ =====================
+
+# Тёплый риф: тропические рыбы -> рифовые рыбы
+R_Warm_Reef:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_TropicalFish 10
+  - MSO_TropicalFish_2 10
+  - MSO_TropicalFish_3 10
+  - MSO_TropicalFish_4 10
+  - MSO_Clownfish 10
+  - MSO_Doryfish 10
+  - MSO_Seahorse 5
+  - MSO_BlueGlaucus 4
+  - MSO_Stingray 3
+  - MSO_Manta_Ray 2
+  Chance: 0.45
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_Doryfish,MSO_Seahorse,MSO_BlueGlaucus,MSO_Stingray,MSO_Manta_Ray;amount=<10;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплый риф, дно: раки-щелкуны, раки-богомолы, жемчужницы, слизни, угри
+R_Warm_Bottom:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_PistolShrimp 5
+  - MSO_MantisShrimp 5
+  - MSO_PearlClam 4
+  - MSO_SeaSlug 4
+  - MSO_GardenEel 4
+  - MSO_Starfish 3
+  - MSO_Crab 2
+  Chance: 0.18
+  Priority: 11
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_PistolShrimp,MSO_MantisShrimp,MSO_PearlClam,MSO_SeaSlug,MSO_GardenEel,MSO_Starfish,MSO_Crab;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплые воды: фугу и крылатки вместо ванильной рыбы-фугу
+R_Warm_Puffer:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Pufferfish 6
+  - MSO_Lionfish 5
+  Chance: 0.6
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  Conditions:
+  - entitytype{t=PUFFERFISH} true
+  - mobsinradius{types=MSO_Pufferfish,MSO_Lionfish;amount=<4;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплый океан: кальмары -> осьминоги, наутилусы, барракуды, медузы
+R_Warm_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Octopus 4
+  - MSO_Octopus_2 4
+  - MSO_Nautilus 4
+  - MSO_Barracuda 3
+  - MSO_MahiMahi 3
+  - MSO_BoxJellyfish 2
+  - MSO_Jellyfish 2
+  Chance: 0.5
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Nautilus,MSO_Barracuda,MSO_MahiMahi,MSO_BoxJellyfish,MSO_Jellyfish;amount=<5;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Дельфины -> дельфины паков
+R_Dolphin:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Dolphin 1
+  Chance: 0.6
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  Conditions:
+  - entitytype{t=DOLPHIN} true
+  - mobsinradius{types=MSO_Dolphin;amount=<6;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан: тропические рыбы
+R_Luke_Reef:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_TropicalFish 8
+  - MSO_TropicalFish_2 8
+  - MSO_TropicalFish_3 8
+  - MSO_TropicalFish_4 8
+  - MSO_Doryfish 6
+  - MSO_Clownfish 4
+  - MSO_Seahorse 4
+  - MSO_BlueGlaucus 3
+  - MSO_Stingray 3
+  - MSO_Manta_Ray 3
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Doryfish,MSO_Clownfish,MSO_Seahorse,MSO_BlueGlaucus,MSO_Stingray,MSO_Manta_Ray;amount=<10;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан, дно
+R_Luke_Bottom:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_GardenEel 4
+  - MSO_Crab 4
+  - MSO_OceanSnail 4
+  - MSO_PistolShrimp 3
+  - MSO_Starfish 3
+  - MSO_MantisShrimp 2
+  - MSO_SeaSlug 2
+  Chance: 0.14
+  Priority: 11
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_GardenEel,MSO_Crab,MSO_OceanSnail,MSO_PistolShrimp,MSO_Starfish,MSO_MantisShrimp,MSO_SeaSlug;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан: треска -> окуни, луны, махи-махи
+R_Luke_Cod:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Seabass 4
+  - MSO_Sunfish 3
+  - MSO_MahiMahi 3
+  - MSO_Stingray 2
+  - MSO_Crab 2
+  - MSO_OceanSnail 2
+  Chance: 0.35
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  Conditions:
+  - entitytype{t=COD} true
+  - mobsinradius{types=MSO_Seabass,MSO_Sunfish,MSO_MahiMahi,MSO_Stingray,MSO_Crab,MSO_OceanSnail;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан: кальмары -> осьминоги, барракуды, медузы
+R_Luke_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Octopus 3
+  - MSO_Octopus_2 3
+  - MSO_Barracuda 3
+  - MSO_Jellyfish 3
+  - MSO_Jellyfish_2 3
+  - MSO_MahiMahi 2
+  Chance: 0.45
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Barracuda,MSO_Jellyfish,MSO_Jellyfish_2,MSO_MahiMahi;amount=<5;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Обычный океан и skylands: треска -> окуни, омары, крабы, звёзды
+R_Temp_Cod:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Seabass 6
+  - MSO_Sunfish 3
+  - MSO_Lobster 3
+  - MSO_Lobster_2 3
+  - MSO_Crab 3
+  - MSO_OceanSnail 3
+  - MSO_Starfish 3
+  - MSO_Manta_Ray 2
+  - MSO_Stingray 2
+  Chance: 0.35
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  Conditions:
+  - entitytype{t=COD} true
+  - mobsinradius{types=MSO_Seabass,MSO_Sunfish,MSO_Lobster,MSO_Lobster_2,MSO_Crab,MSO_OceanSnail,MSO_Starfish,MSO_Manta_Ray,MSO_Stingray;amount=<8;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Обычный океан: кальмары -> осьминоги и медузы
+R_Temp_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Octopus 3
+  - MSO_Octopus_2 3
+  - MSO_Jellyfish 3
+  - MSO_Jellyfish_2 3
+  - MSO_MahiMahi 2
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Jellyfish,MSO_Jellyfish_2,MSO_MahiMahi;amount=<5;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Холодный океан: треска -> омары, крабы-пауки, звёзды
+R_Cold_Cod:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Lobster 4
+  - MSO_Lobster_2 4
+  - MSO_SpiderCrab 4
+  - MSO_Starfish 3
+  - MSO_Seabass 3
+  - MSO_Crab 2
+  Chance: 0.35
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  Conditions:
+  - entitytype{t=COD} true
+  - mobsinradius{types=MSO_Lobster,MSO_Lobster_2,MSO_SpiderCrab,MSO_Starfish,MSO_Seabass,MSO_Crab;amount=<7;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Холодный океан: лосось -> окуни и морские ангелы
+R_Cold_Salmon:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Seabass 4
+  - MSO_SeaAngel 3
+  - MSO_Starfish 2
+  Chance: 0.25
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  Conditions:
+  - entitytype{t=SALMON} true
+  - mobsinradius{types=MSO_Seabass,MSO_SeaAngel,MSO_Starfish;amount=<5;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Холодный океан: кальмары -> осьминоги и медузы
+R_Cold_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Octopus 2
+  - MSO_Octopus_2 2
+  - MSO_Jellyfish 3
+  - MSO_Jellyfish_2 3
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Jellyfish,MSO_Jellyfish_2;amount=<4;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Ледяной океан: лосось -> морские ангелы, звёзды, крабы-пауки
+R_Frozen_Salmon:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_SeaAngel 6
+  - MSO_Starfish 3
+  - MSO_SpiderCrab 2
+  Chance: 0.35
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:frozen_ocean
+  - minecraft:deep_frozen_ocean
+  Conditions:
+  - entitytype{t=SALMON} true
+  - mobsinradius{types=MSO_SeaAngel,MSO_Starfish,MSO_SpiderCrab;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Ледяной океан: кальмары -> нарвалы
+R_Frozen_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Narwhal 1
+  Chance: 0.5
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:frozen_ocean
+  - minecraft:deep_frozen_ocean
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Narwhal;amount=<4;radius=64} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Глубоководье: светящиеся кальмары -> удильщики, сельдяные короли, гигантский кальмар
+R_Deep:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Anglerfish 6
+  - MSO_Oarfish 3
+  - MSO_GiantSquid 1
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:deep_ocean
+  - minecraft:deep_lukewarm_ocean
+  - minecraft:deep_cold_ocean
+  - minecraft:deep_frozen_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - entitytype{t=GLOW_SQUID} true
+  - mobsinradius{types=MSO_Anglerfish,MSO_Oarfish,MSO_GiantSquid;amount=<4;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Реки: лосось -> сомы
+R_River_Salmon:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Catfish 1
+  Chance: 0.3
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:river
+  - minecraft:frozen_river
+  - terralith:ice_marsh
+  Conditions:
+  - entitytype{t=SALMON} true
+  - mobsinradius{types=MSO_Catfish;amount=<4;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Реки: кальмары -> сомы и угри
+R_River_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Catfish 4
+  - MSO_ElectricEel 1
+  Chance: 0.3
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:river
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Catfish,MSO_ElectricEel;amount=<4;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплая река Terralith: тропические рыбы -> сомы, угри, петушки, пираньи
+R_WarmRiver:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Catfish 4
+  - MSO_ElectricEel 3
+  - MSO_BettaFish 2
+  - MSO_BettaFish_2 2
+  - MSO_BettaFish_3 2
+  - MSO_Piranha 2
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - terralith:warm_river
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_Catfish,MSO_ElectricEel,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Piranha;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплая река Terralith: кальмары -> ламантины, сомы, угри
+R_WarmRiver_Squid:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Manatee 3
+  - MSO_Catfish 3
+  - MSO_ElectricEel 2
+  Chance: 0.6
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - terralith:warm_river
+  Conditions:
+  - entitytype{t=SQUID} true
+  - mobsinradius{types=MSO_Manatee,MSO_Catfish,MSO_ElectricEel;amount=<5;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Мангры: тропические рыбы -> крабы, петушки, сомы, угри
+R_Mangrove:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_Crab 5
+  - MSO_BettaFish 3
+  - MSO_BettaFish_2 3
+  - MSO_BettaFish_3 3
+  - MSO_Catfish 3
+  - MSO_ElectricEel 2
+  - MSO_Piranha 1
+  - MSO_Manatee 1
+  Chance: 0.4
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:mangrove_swamp
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_Crab,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Catfish,MSO_ElectricEel,MSO_Piranha,MSO_Manatee;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Пышные пещеры: тропические рыбы -> петушки
+R_Lush:
+  Action: REPLACE
+  Worlds: world
+  Types:
+  - MSO_BettaFish 1
+  - MSO_BettaFish_2 1
+  - MSO_BettaFish_3 1
+  Chance: 0.3
+  Priority: 10
+  UseWorldScaling: false
+  Biomes:
+  - minecraft:lush_caves
+  - terralith:cave/underground_jungle
+  Conditions:
+  - entitytype{t=TROPICAL_FISH} true
+  - mobsinradius{types=MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3;amount=<4;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# ===================== СЛОЙ 2: СОБСТВЕННЫЙ СПАВН В ВОДЕ =====================
+
+# Тёплый риф: стаи рыб
+A_Warm_Reef:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_TropicalFish 6
+  - MSO_TropicalFish_2 6
+  - MSO_TropicalFish_3 6
+  - MSO_TropicalFish_4 6
+  - MSO_Clownfish 8
+  - MSO_Doryfish 8
+  - MSO_Seahorse 5
+  - MSO_BlueGlaucus 3
+  Chance: 0.12
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 8
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - mobsinradius{types=MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_Doryfish,MSO_Seahorse,MSO_BlueGlaucus;amount=<10;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплый риф, дно: раки-щелкуны, богомолы, жемчужницы, садовые угри
+A_Warm_Bottom:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_PistolShrimp 6
+  - MSO_MantisShrimp 5
+  - MSO_PearlClam 4
+  - MSO_GardenEel 4
+  - MSO_SeaSlug 3
+  - MSO_Starfish 3
+  - MSO_Crab 2
+  Chance: 0.1
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 10
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - mobsinradius{types=MSO_PistolShrimp,MSO_MantisShrimp,MSO_PearlClam,MSO_GardenEel,MSO_SeaSlug,MSO_Starfish,MSO_Crab;amount=<7;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплый океан: крупные обитатели
+A_Warm_Big:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Octopus 3
+  - MSO_Octopus_2 3
+  - MSO_Nautilus 3
+  - MSO_Manta_Ray 3
+  - MSO_Stingray 3
+  - MSO_Barracuda 2
+  - MSO_MahiMahi 2
+  - MSO_Lionfish 3
+  - MSO_Pufferfish 3
+  - MSO_Manatee 1
+  Chance: 0.06
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 20
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Nautilus,MSO_Manta_Ray,MSO_Stingray,MSO_Barracuda,MSO_MahiMahi,MSO_Lionfish,MSO_Pufferfish,MSO_Manatee;amount=<5;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплый океан: медузы и морские осы
+A_Warm_Jelly:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_BoxJellyfish 3
+  - MSO_Jellyfish 2
+  - MSO_Jellyfish_2 2
+  Chance: 0.05
+  Priority: 10
+  UseWorldScaling: false
+  Cooldown: 30
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - mobsinradius{types=MSO_BoxJellyfish,MSO_Jellyfish,MSO_Jellyfish_2;amount=<3;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан и Mirage Isles: рыбы
+A_Luke_Reef:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_TropicalFish 5
+  - MSO_TropicalFish_2 5
+  - MSO_TropicalFish_3 5
+  - MSO_TropicalFish_4 5
+  - MSO_Doryfish 6
+  - MSO_Clownfish 3
+  - MSO_Seahorse 4
+  - MSO_Seabass 4
+  - MSO_Sunfish 2
+  - MSO_BlueGlaucus 2
+  Chance: 0.12
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 8
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  - terralith:mirage_isles
+  Conditions:
+  - mobsinradius{types=MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Doryfish,MSO_Clownfish,MSO_Seahorse,MSO_Seabass,MSO_Sunfish,MSO_BlueGlaucus;amount=<9;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан, дно
+A_Luke_Bottom:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Crab 4
+  - MSO_OceanSnail 4
+  - MSO_GardenEel 4
+  - MSO_PistolShrimp 4
+  - MSO_Starfish 3
+  - MSO_MantisShrimp 2
+  - MSO_PearlClam 2
+  - MSO_SeaSlug 2
+  Chance: 0.1
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 10
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  - terralith:mirage_isles
+  Conditions:
+  - mobsinradius{types=MSO_Crab,MSO_OceanSnail,MSO_GardenEel,MSO_PistolShrimp,MSO_Starfish,MSO_MantisShrimp,MSO_PearlClam,MSO_SeaSlug;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Умеренно-тёплый океан: крупные
+A_Luke_Big:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Octopus 3
+  - MSO_Octopus_2 3
+  - MSO_Manta_Ray 3
+  - MSO_Stingray 3
+  - MSO_Barracuda 2
+  - MSO_MahiMahi 3
+  - MSO_Jellyfish 2
+  - MSO_Jellyfish_2 2
+  Chance: 0.06
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 20
+  Biomes:
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  - terralith:mirage_isles
+  Conditions:
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Manta_Ray,MSO_Stingray,MSO_Barracuda,MSO_MahiMahi,MSO_Jellyfish,MSO_Jellyfish_2;amount=<5;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Обычный океан, побережья, skylands, Alpha Isles: рыбы
+A_Temp_Fish:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Seabass 8
+  - MSO_Sunfish 3
+  - MSO_Stingray 2
+  - MSO_Manta_Ray 2
+  - MSO_MahiMahi 2
+  Chance: 0.12
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 8
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  - terralith:alpha_islands
+  - terralith:gravel_beach
+  - minecraft:beach
+  - minecraft:stony_shore
+  - minecraft:mushroom_fields
+  Conditions:
+  - mobsinradius{types=MSO_Seabass,MSO_Sunfish,MSO_Stingray,MSO_Manta_Ray,MSO_MahiMahi;amount=<8;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Обычный океан и побережья, дно: омары, крабы, улитки, звёзды
+A_Temp_Bottom:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Lobster 3
+  - MSO_Lobster_2 3
+  - MSO_Crab 4
+  - MSO_OceanSnail 3
+  - MSO_Starfish 4
+  - MSO_SpiderCrab 1
+  Chance: 0.1
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 10
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  - terralith:alpha_islands
+  - terralith:gravel_beach
+  - minecraft:beach
+  - minecraft:stony_shore
+  - minecraft:mushroom_fields
+  Conditions:
+  - mobsinradius{types=MSO_Lobster,MSO_Lobster_2,MSO_Crab,MSO_OceanSnail,MSO_Starfish,MSO_SpiderCrab;amount=<7;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Обычный океан: осьминоги и медузы
+A_Temp_Big:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Octopus 3
+  - MSO_Octopus_2 3
+  - MSO_Jellyfish 3
+  - MSO_Jellyfish_2 3
+  Chance: 0.05
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 25
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  - terralith:alpha_islands
+  - terralith:gravel_beach
+  - minecraft:beach
+  - minecraft:stony_shore
+  - minecraft:mushroom_fields
+  Conditions:
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Jellyfish,MSO_Jellyfish_2;amount=<4;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Холодный океан и снежные пляжи
+A_Cold_Life:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Lobster 3
+  - MSO_Lobster_2 3
+  - MSO_SpiderCrab 4
+  - MSO_Starfish 3
+  - MSO_Seabass 4
+  - MSO_SeaAngel 3
+  - MSO_Crab 1
+  Chance: 0.1
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 10
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  - minecraft:snowy_beach
+  Conditions:
+  - mobsinradius{types=MSO_Lobster,MSO_Lobster_2,MSO_SpiderCrab,MSO_Starfish,MSO_Seabass,MSO_SeaAngel,MSO_Crab;amount=<7;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Холодный океан: осьминоги и медузы
+A_Cold_Big:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Octopus 2
+  - MSO_Octopus_2 2
+  - MSO_Jellyfish 3
+  - MSO_Jellyfish_2 3
+  Chance: 0.05
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 25
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  - minecraft:snowy_beach
+  Conditions:
+  - mobsinradius{types=MSO_Octopus,MSO_Octopus_2,MSO_Jellyfish,MSO_Jellyfish_2;amount=<4;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Ледяной океан: морские ангелы, звёзды, крабы-пауки
+A_Frozen_Life:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_SeaAngel 6
+  - MSO_Starfish 3
+  - MSO_SpiderCrab 3
+  Chance: 0.1
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 10
+  Biomes:
+  - minecraft:frozen_ocean
+  - minecraft:deep_frozen_ocean
+  - terralith:alpha_islands_winter
+  Conditions:
+  - mobsinradius{types=MSO_SeaAngel,MSO_Starfish,MSO_SpiderCrab;amount=<6;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Ледяной океан: нарвалы
+A_Frozen_Narwhal:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Narwhal 1
+  Chance: 0.04
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 40
+  Biomes:
+  - minecraft:frozen_ocean
+  - minecraft:deep_frozen_ocean
+  - terralith:alpha_islands_winter
+  Conditions:
+  - mobsinradius{types=MSO_Narwhal;amount=<3;radius=64} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Глубоководье: удильщики, сельдяные короли, гигантский кальмар
+A_Deep:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Anglerfish 5
+  - MSO_Oarfish 3
+  - MSO_GiantSquid 1
+  Chance: 0.04
+  Priority: 11
+  UseWorldScaling: false
+  Cooldown: 45
+  Biomes:
+  - minecraft:deep_ocean
+  - minecraft:deep_lukewarm_ocean
+  - minecraft:deep_cold_ocean
+  - minecraft:deep_frozen_ocean
+  - terralith:deep_warm_ocean
+  Conditions:
+  - mobsinradius{types=MSO_Anglerfish,MSO_Oarfish,MSO_GiantSquid;amount=<3;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Хищники тёплых морей: акулы-молоты, акулы, рыба-меч
+A_Apex_Warm:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_HammerheadShark 4
+  - MSO_HammerheadShark_2 4
+  - MSO_Shark 2
+  - MSO_Shark_2 2
+  - MSO_Swordfish 2
+  Chance: 0.02
+  Priority: 9
+  UseWorldScaling: false
+  Cooldown: 120
+  Biomes:
+  - minecraft:warm_ocean
+  - terralith:deep_warm_ocean
+  - minecraft:lukewarm_ocean
+  - minecraft:deep_lukewarm_ocean
+  - terralith:mirage_isles
+  Conditions:
+  - mobsinradius{types=MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Shark,MSO_Shark_2,MSO_Swordfish;amount=<1;radius=96} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Хищники открытого океана: акулы, рыба-меч, косатки
+A_Apex_Temperate:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Shark 4
+  - MSO_Shark_2 4
+  - MSO_Swordfish 4
+  - MSO_OrcaWhale 1
+  Chance: 0.02
+  Priority: 9
+  UseWorldScaling: false
+  Cooldown: 120
+  Biomes:
+  - minecraft:ocean
+  - minecraft:deep_ocean
+  - terralith:skylands_spring
+  - terralith:skylands_summer
+  - terralith:skylands_autumn
+  Conditions:
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_OrcaWhale;amount=<1;radius=96} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Хищники холодных морей: косатки и акулы
+A_Apex_Cold:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_OrcaWhale 4
+  - MSO_Shark 2
+  - MSO_Shark_2 2
+  Chance: 0.02
+  Priority: 9
+  UseWorldScaling: false
+  Cooldown: 150
+  Biomes:
+  - minecraft:cold_ocean
+  - minecraft:deep_cold_ocean
+  - terralith:skylands_winter
+  - minecraft:frozen_ocean
+  - minecraft:deep_frozen_ocean
+  - terralith:alpha_islands_winter
+  Conditions:
+  - mobsinradius{types=MSO_OrcaWhale,MSO_Shark,MSO_Shark_2;amount=<1;radius=96} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Реки, болота, озёра умеренного пояса: сомы и крабы
+A_Fresh_Temperate:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Catfish 6
+  - MSO_Crab 2
+  Chance: 0.08
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 15
+  Biomes:
+  - minecraft:river
+  - minecraft:swamp
+  - terralith:orchid_swamp
+  - terralith:lush_valley
+  - terralith:shield_clearing
+  Conditions:
+  - mobsinradius{types=MSO_Catfish,MSO_Crab;amount=<4;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Замёрзшие реки и ледяные болота: сомы
+A_Fresh_Cold:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Catfish 1
+  Chance: 0.05
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 30
+  Biomes:
+  - minecraft:frozen_river
+  - terralith:ice_marsh
+  Conditions:
+  - mobsinradius{types=MSO_Catfish;amount=<2;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплые реки, мангры, джунгли, оазисы: петушки, угри, сомы, крабы
+A_Fresh_Warm:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_BettaFish 3
+  - MSO_BettaFish_2 3
+  - MSO_BettaFish_3 3
+  - MSO_ElectricEel 3
+  - MSO_Catfish 3
+  - MSO_Crab 2
+  Chance: 0.08
+  Priority: 12
+  UseWorldScaling: false
+  Cooldown: 15
+  Biomes:
+  - terralith:warm_river
+  - minecraft:mangrove_swamp
+  - minecraft:jungle
+  - minecraft:sparse_jungle
+  - minecraft:bamboo_jungle
+  - terralith:tropical_jungle
+  - terralith:rocky_jungle
+  - terralith:amethyst_rainforest
+  - terralith:desert_oasis
+  - terralith:red_oasis
+  Conditions:
+  - mobsinradius{types=MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_ElectricEel,MSO_Catfish,MSO_Crab;amount=<5;radius=32} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true
+
+# Тёплые реки, мангры, джунгли: пираньи
+A_Fresh_Piranha:
+  Action: ADD
+  PositionType: SEA
+  Worlds: world
+  Types:
+  - MSO_Piranha 1
+  Chance: 0.03
+  Priority: 10
+  UseWorldScaling: false
+  Cooldown: 60
+  Biomes:
+  - terralith:warm_river
+  - minecraft:mangrove_swamp
+  - minecraft:jungle
+  - minecraft:bamboo_jungle
+  - terralith:tropical_jungle
+  - terralith:rocky_jungle
+  - terralith:amethyst_rainforest
+  Conditions:
+  - mobsinradius{types=MSO_Piranha;amount=<2;radius=48} true
+  - mobsinradius{types=MSO_Shark,MSO_Shark_2,MSO_Swordfish,MSO_SeaSlug,MSO_Manta_Ray,MSO_Jellyfish,MSO_Jellyfish_2,MSO_Jellyfish_Summon,MSO_Sunfish,MSO_Starfish,MSO_Starfish_Summon,MSO_Catfish,MSO_Dolphin,MSO_Lobster,MSO_Lobster_2,MSO_Seabass,MSO_Seabass_Summon,MSO_Manatee,MSO_SpiderCrab,MSO_MahiMahi,MSO_Oarfish,MSO_ElectricEel,MSO_TropicalFish,MSO_TropicalFish_2,MSO_TropicalFish_3,MSO_TropicalFish_4,MSO_Clownfish,MSO_BlueGlaucus,MSO_BettaFish,MSO_BettaFish_2,MSO_BettaFish_3,MSO_Doryfish,MSO_GardenEel,MSO_GardenEel_Summon,MSO_MantisShrimp,MSO_Narwhal,MSO_Crab,MSO_Seahorse,MSO_Seahorse_Summon,MSO_Lionfish,MSO_OceanSnail,MSO_OrcaWhale,MSO_BoxJellyfish,MSO_Anglerfish,MSO_Nautilus,MSO_Piranha,MSO_Piranha_Summon,MSO_SeaAngel,MSO_SeaAngel_Summon,MSO_Barracuda,MSO_HammerheadShark,MSO_HammerheadShark_2,MSO_Octopus,MSO_Octopus_2,MSO_Stingray,MSO_Pufferfish,MSO_PearlClam,MSO_PistolShrimp,MSO_GiantSquid;amount=<24;radius=48} true

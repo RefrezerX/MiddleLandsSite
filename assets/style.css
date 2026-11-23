@@ -316,3 +316,9 @@ kbd{font:700 .78em/1 var(--sans);display:inline-block;min-width:2em;text-align:c
 .photo.is-empty .photo-slot{display:none!important}
 .photo.is-empty{background:radial-gradient(ellipse at 50% 120%,rgba(255,138,61,.22),transparent 60%),linear-gradient(160deg,#1b2129,#0f1317)}
 .photo.is-empty::after{content:"";position:absolute;inset:0;background:url(../img/logo-small.png) center/38% no-repeat;opacity:.18;filter:grayscale(.3)}
+.g-search{margin:0 0 1.6em;padding:14px 16px;border:1px solid var(--iron);border-radius:var(--r-md);background:rgba(255,255,255,.02)}
+.g-search label{display:block;font:700 .92rem/1.3 var(--sans);color:var(--gold-hi);margin-bottom:8px}
+.g-search input{width:100%;box-sizing:border-box;padding:10px 12px;font:inherit;color:#eee6d4;background:#11161b;border:1px solid var(--iron-2);border-radius:8px}
+.g-search input:focus{outline:2px solid var(--gold-hi);outline-offset:1px}
+.g-search-count{margin:8px 0 0;font-size:.9rem;color:#b9b09d;min-height:1.2em}
+.g-sec[hidden],.table-wrap tr[hidden]{display:none}
